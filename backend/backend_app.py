@@ -31,6 +31,25 @@ def get_posts():
         if 'id' in post and post.get('id') > highest_id:
             highest_id = post.get('id')
 
+    if request.method == 'GET':
+        sort_field = request.args.get('sort')
+        sort_direction = request.args.get('direction')
+        print(sort_field, sort_direction)
+
+        if sort_field not in [None, 'title', 'content']:
+            return jsonify({'error': 'Invalid sort field. Must be "title" or "content".'}), 400
+
+        if sort_direction not in [None, 'asc', 'desc']:
+            return jsonify({'error': 'Invalid sort direction. Must be "asc" or "desc".'}), 400
+
+        sorted_posts = POSTS
+
+        if sort_field:
+            reverse = True if sort_direction == 'desc' else False
+            sorted_posts = sorted(POSTS, key=lambda p: p[sort_field].lower(), reverse=reverse)
+
+        return jsonify(sorted_posts), 200
+
     if request.method == 'POST':
         data = request.get_json()
 
@@ -87,27 +106,6 @@ def search_posts():
 
     print(filtered_posts)
     return jsonify(filtered_posts), 200
-
-
-@app.route('/api/posts', methods=['GET'])
-def list_posts():
-    sort_field = request.args.get('sort')
-    sort_direction = request.args.get('direction')
-    print(sort_field, sort_direction)
-
-    if sort_field not in [None, 'title', 'content']:
-        return jsonify({'error': 'Invalid sort field. Must be "title" or "content".'}), 400
-
-    if sort_direction not in [None, 'asc', 'desc']:
-        return jsonify({'error': 'Invalid sort direction. Must be "asc" or "desc".'}), 400
-
-    sorted_posts = POSTS
-
-    if sort_field:
-        reverse = True if sort_direction == 'desc' else False
-        sorted_posts = sorted(POSTS, key=lambda p: p[sort_field].lower(), reverse=reverse)
-
-    return jsonify(sorted_posts), 200
 
 
 if __name__ == '__main__':
