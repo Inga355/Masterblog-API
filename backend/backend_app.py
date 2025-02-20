@@ -3,10 +3,10 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
+CORS(app)
 
 SWAGGER_URL="/api/docs"  # (1) swagger endpoint e.g. HTTP://localhost:5002/api/docs
-API_URL="/static/masterblog.json" # (2) ensure you create this dir and file
+API_URL="/static/masterblog.json"
 
 swagger_ui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
@@ -26,6 +26,15 @@ POSTS = [
 
 @app.route('/api/posts', methods=['GET','POST'])
 def get_posts():
+    """
+    Route to get all posts or create a new post.
+
+    GET: Returns a sorted list of posts based on the specified sort field and direction.
+    POST: Creates a new post with the provided title and content.
+
+    Returns:
+        Response: The JSON response with the list of posts or the newly created post.
+    """
     highest_id = 0
     for post in POSTS:
         if 'id' in post and post.get('id') > highest_id:
@@ -68,6 +77,15 @@ def get_posts():
 
 @app.route("/api/posts/<int:id>", methods=['DELETE'])
 def delete_post(id):
+    """
+    Route to delete a post by its ID.
+
+    Args:
+        id (int): The ID of the post to delete.
+
+    Returns:
+        Response: A JSON response indicating the success or failure of the deletion.
+    """
     global POSTS
     post = next((p for p in POSTS if p['id'] == id), None)
 
@@ -80,6 +98,16 @@ def delete_post(id):
 
 @app.route('/api/posts/<int:id>', methods=['PUT'])
 def update_post(id):
+    """
+    Route to update a post by its ID.
+
+    Args:
+        id (int): The ID of the post to update.
+
+    Returns:
+        Response: A JSON response indicating the success or failure of the deletion
+        and the updated post.
+    """
     data = request.get_json()
     post = next((p for p in POSTS if p['id'] == id), None)
 
@@ -96,6 +124,13 @@ def update_post(id):
 
 @app.route('/api/posts/search', methods=['GET'])
 def search_posts():
+    """
+    Route to search for a post by its title or content.
+    Allows for searching parts of the authors name or part of content.
+
+    Returns:
+        Response: A JSON response with all the matching posts.
+    """
     global POSTS
     title_query = request.args.get('title', '').lower()
     content_query = request.args.get('content', '').lower()
