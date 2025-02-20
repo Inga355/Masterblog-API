@@ -4,14 +4,27 @@
     "title": "Masterblog API",
     "version": "1.0.0"
   },
-  "servers": [{ "url": "http://localhost:5002" }],
-  "tags": [{ "name": "Post", "description": "Post API - CRUD" }],
+  "servers": [
+    {
+      "url": "http://localhost:5002"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Post",
+      "description": "Post API - CRUD"
+    }
+  ],
   "paths": {
     "/api/posts": {
       "get": {
         "summary": "Returns all posts",
-        "produces": ["application/json"],
-        "tags": ["Post"],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Post"
+        ],
         "responses": {
           "200": {
             "description": "Successful operation"
@@ -20,9 +33,15 @@
       },
       "post": {
         "summary": "Adds a new post",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "tags": ["Post"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Post"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -38,7 +57,10 @@
                   "type": "string"
                 }
               },
-              "required": ["title", "content"]
+              "required": [
+                "title",
+                "content"
+              ]
             }
           }
         ],
@@ -55,8 +77,12 @@
     "/api/posts/{id}": {
       "delete": {
         "summary": "Deletes a post by ID",
-        "produces": ["application/json"],
-        "tags": ["Post"],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Post"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -73,7 +99,63 @@
             "description": "Post not found"
           }
         }
+      },
+      "put": {
+        "summary": "Updates a post by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Post"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "post"
+          },
+          "404": {
+            "description": "'error': 'post not found'"
+          }
+        }
+      }
+    },
+      "/api/posts/search": {
+        "get": {
+          "summary": "Search for a post title or content",
+          "produces": [
+            "application/json"
+          ],
+          "tags": [
+            "Post"
+          ],
+          "parameters": [
+            {
+              "name": "title",
+              "in": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "content",
+              "in": "path",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "post"
+            }
+          }
+        }
       }
     }
   }
-}
+

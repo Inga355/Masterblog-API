@@ -119,7 +119,7 @@ def update_post(id):
     if data.get('content'):
         post['content'] = data['content']
 
-    return jsonify(post)
+    return jsonify(post), 200
 
 
 @app.route('/api/posts/search', methods=['GET'])
