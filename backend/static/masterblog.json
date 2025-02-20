@@ -4,7 +4,7 @@
     "title": "Masterblog API",
     "version": "1.0.0"
   },
-  "servers": [{ "url": "http://localhost:5001" }],
+  "servers": [{ "url": "http://localhost:5002" }],
   "tags": [{ "name": "Post", "description": "Post API - CRUD" }],
   "paths": {
     "/api/posts": {
